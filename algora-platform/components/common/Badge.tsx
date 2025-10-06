@@ -9,18 +9,20 @@ interface BadgeProps {
 
 export function Badge({ children, variant = 'default', className = '' }: BadgeProps) {
   const variants = {
-    default: "bg-primary-500/16 text-slate-200 border-primary-500/25",
-    subscription: "bg-accent/14 text-[#e0f2fe] border-accent/25",
-    success: "bg-success/16 text-[#bbf7d0] border-success/25",
-    warning: "bg-warning/16 text-[#fef3c7] border-warning/25"
+    default: "bg-primary-500/18 text-slate-100 border-primary-500/35",
+    subscription: "bg-accent/20 text-[#c1f1ff] border-accent/40",
+    success: "bg-success/18 text-[#d1fae5] border-success/40",
+    warning: "bg-warning/22 text-[#fef3c7] border-warning/45"
   };
-  
+
   return (
-    <span className={cn(
-      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border uppercase tracking-wider",
-      variants[variant],
-      className
-    )}>
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border leading-tight",
+        variants[variant],
+        className
+      )}
+    >
       {children}
     </span>
   );
