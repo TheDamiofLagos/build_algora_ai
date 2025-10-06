@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algora - Tech Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .subscription-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-main {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .dashboard-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            border-radius: 10px;
+            height: 20px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #10b981, #059669);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .module-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .module-card {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .module-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .module-card.completed {
+            background: #ecfdf5;
+            border-color: #10b981;
+        }
+
+        .lesson-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .video-container {
+            background: #000;
+            border-radius: 8px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 1rem 0;
+        }
+
+        .quiz-container {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .quiz-question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+        }
+
+        .quiz-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-success {
+            background: #10b981;
+        }
+
+        .upcoming-sessions {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .subscription-info {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .admin-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border: 3px solid #667eea;
+            transform: scale(1.05);
+        }
+
+        .pricing-card .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 1rem 0;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .calendar-day:hover {
+            background: #f3f4f6;
+        }
+
+        .calendar-day.available {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Algora</div>
+                <nav>
+                    <ul>
+                        <li><a href="#" onclick="showPage('dashboard')">Dashboard</a></li>
+                        <li><a href="#" onclick="showPage('learning')">Learning</a></li>
+                        <li><a href="#" onclick="showPage('calendar')">Office Hours</a></li>
+                        <li><a href="#" onclick="showPage('subscription')">Subscription</a></li>
+                        <li><a href="#" onclick="showPage('admin')" id="adminLink" style="display:none;">Admin</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <span class="subscription-badge" id="userTier">Pro Lite</span>
+                    <span id="userName">Tola</span>
+                    <select id="userSelect" onchange="switchUser()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.25rem;">
+                        <option value="learner">Tola (Learner)</option>
+                        <option value="tutor">Tunji (Tutor)</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <h1>Welcome back, <span id="dashboardName">Tola</span>!</h1>
+                <div class="dashboard-grid">
+                    <div class="dashboard-main">
+                        <h2>Your Learning Journey</h2>
+                        <div>
+                            <h3>Data Analytics Track</h3>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 35%"></div>
+                            </div>
+                            <p>Progress: 35% Complete (7 of 20 lessons)</p>
+                        </div>
+                        
+                        <div class="module-list">
+                            <div class="module-card completed" onclick="openLesson('intro')">
+                                <h4>✓ Module 1: Introduction to Data Analytics</h4>
+                                <p>5/5 lessons completed</p>
+                            </div>
+                            <div class="module-card" onclick="openLesson('excel')">
+                                <h4>Module 2: Excel Fundamentals</h4>
+                                <p>2/4 lessons completed</p>
+                                <div class="progress-bar" style="height: 8px; margin-top: 0.5rem;">
+                                    <div class="progress-fill" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            <div class="module-card">
+                                <h4>Module 3: SQL Basics</h4>
+                                <p>0/6 lessons completed</p>
+                                <div class="progress-bar" style="height: 8px; margin-top: 0.5rem;">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-sidebar">
+                        <div class="upcoming-sessions">
+                            <h3>Upcoming Sessions</h3>
+                            <div class="session-item">
+                                <div>
+                                    <strong>Group Office Hours</strong>
+                                    <br>Data Analytics Q&A
+                                </div>
+                                <div>
+                                    <small>Tomorrow 7PM</small>
+                                    <br><button class="btn" onclick="joinSession()">Join</button>
+                                </div>
+                            </div>
+                            <div class="session-item" id="oneOnOneSession" style="display: none;">
+                                <div>
+                                    <strong>1:1 Session</strong>
+                                    <br>Excel Help
+                                </div>
+                                <div>
+                                    <small>Friday 3PM</small>
+                                    <br><button class="btn" onclick="joinSession()">Join</button>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" onclick="showPage('calendar')" style="width: 100%; margin-top: 1rem;">Book Session</button>
+                        </div>
+                        
+                        <div class="subscription-info">
+                            <h3>Subscription</h3>
+                            <div class="subscription-badge" style="background: #10b981; display: block; margin: 1rem 0;">
+                                <span id="tierName">Pro Lite</span>
+                            </div>
+                            <p id="sessionCount">1 one-on-one session remaining</p>
+                            <button class="btn" onclick="showPage('subscription')" style="width: 100%; margin-top: 1rem;">Manage</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Page -->
+            <div id="learning" class="page">
+                <h1>Excel Fundamentals - Lesson 3</h1>
+                
+                <div class="lesson-content">
+                    <h2>Working with Formulas</h2>
+                    
+                    <div class="video-container">
+                        <div>
+                            <h3>📹 Video: Excel Formulas Basics</h3>
+                            <p>Duration: 15 minutes</p>
+                            <button class="btn" onclick="playVideo()">Play Video</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 2rem 0;">
+                        <h3>Lesson Content</h3>
+                        <p>In this lesson, you'll learn how to create and use basic formulas in Excel. Formulas are the backbone of Excel's power, allowing you to perform calculations, analyze data, and automate repetitive tasks.</p>
+                        
+                        <h4>Key Topics:</h4>
+                        <ul style="margin-left: 2rem; margin-top: 1rem;">
+                            <li>Understanding cell references</li>
+                            <li>Basic arithmetic operations</li>
+                            <li>Using functions like SUM, AVERAGE, COUNT</li>
+                            <li>Relative vs absolute references</li>
+                        </ul>
+                        
+                        <div style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 1rem; margin: 1rem 0;">
+                            <strong>💡 Pro Tip:</strong> Always start your formulas with an equals sign (=) and use parentheses to control the order of operations.
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-container">
+                        <h3>Knowledge Check</h3>
+                        <div class="quiz-question">Which symbol must every Excel formula begin with?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectQuizOption(this)">A) +</div>
+                            <div class="quiz-option" onclick="selectQuizOption(this)">B) =</div>
+                            <div class="quiz-option" onclick="selectQuizOption(this)">C) -</div>
+                            <div class="quiz-option" onclick="selectQuizOption(this)">D) *</div>
+                        </div>
+                        <button class="btn" onclick="submitQuiz()" style="margin-top: 1rem;">Submit Answer</button>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                        <button class="btn btn-secondary" onclick="previousLesson()">← Previous Lesson</button>
+                        <button class="btn" onclick="completeLesson()">Complete Lesson →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Page -->
+            <div id="calendar" class="page">
+                <h1>Office Hours & Booking</h1>
+                
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem;">
+                    <div>
+                        <h2>Group Office Hours</h2>
+                        <div style="background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+                            <div class="session-item">
+                                <div>
+                                    <strong>Data Analytics Q&A Session</strong>
+                                    <br>Weekly group discussion and problem-solving
+                                    <br><small>Instructor: Tunji Adebayo</small>
+                                </div>
+                                <div>
+                                    <strong>Tuesdays 7:00 PM</strong>
+                                    <br><button class="btn" onclick="joinZoom()">Join Zoom</button>
+                                </div>
+                            </div>
+                            <div class="session-item">
+                                <div>
+                                    <strong>Excel Workshop</strong>
+                                    <br>Hands-on Excel practice session
+                                    <br><small>Instructor: Sarah Johnson</small>
+                                </div>
+                                <div>
+                                    <strong>Saturdays 2:00 PM</strong>
+                                    <br><button class="btn" onclick="joinZoom()">Join Zoom</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="oneOnOneBooking">
+                            <h2>Book 1:1 Session</h2>
+                            <div style="background: white; border-radius: 12px; padding: 2rem;">
+                                <div class="calendar-grid" style="margin-bottom: 2rem;">
+                                    <div style="background: #667eea; color: white; font-weight: bold;">Sun</div>
+                                    <div style="background: #667eea; color: white; font-weight: bold;">Mon</div>
+                                    <div style="background: #667eea; color: white; font-weight: bold;">Tue</div>
+                                    <div style="background: #667eea; color: white; font-weight: bold;">Wed</div>
+                                    <div style="background: #667eea; color: white; font-weight: bold;">Thu</div>
+                                    <div style="background: #667eea; color: white; font-weight: bold;">Fri</div>
+                                    <div style="background: #667eea; color: white; font-weight: bold;">Sat</div>
+                                    <div class="calendar-day">1</div>
+                                    <div class="calendar-day">2</div>
+                                    <div class="calendar-day available" onclick="bookSession(this)">3</div>
+                                    <div class="calendar-day">4</div>
+                                    <div class="calendar-day available" onclick="bookSession(this)">5</div>
+                                    <div class="calendar-day">6</div>
+                                    <div class="calendar-day">7</div>
+                                    <div class="calendar-day available" onclick="bookSession(this)">8</div>
+                                    <div class="calendar-day">9</div>
+                                    <div class="calendar-day available" onclick="bookSession(this)">10</div>
+                                    <div class="calendar-day">11</div>
+                                    <div class="calendar-day available" onclick="bookSession(this)">12</div>
+                                    <div class="calendar-day">13</div>
+                                    <div class="calendar-day">14</div>
+                                </div>
+                                
+                                <div id="timeSlots" style="display: none;">
+                                    <h3>Available Times</h3>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem; margin: 1rem 0;">
+                                        <button class="btn btn-secondary" onclick="selectTime(this)">10:00 AM</button>
+                                        <button class="btn btn-secondary" onclick="selectTime(this)">2:00 PM</button>
+                                        <button class="btn btn-secondary" onclick="selectTime(this)">4:00 PM</button>
+                                        <button class="btn btn-secondary" onclick="selectTime(this)">6:00 PM</button>
+                                    </div>
+                                    <button class="btn" onclick="confirmBooking()" style="width: 100%; margin-top: 1rem;">Confirm Booking</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem;">
+                            <h3>Your Sessions</h3>
+                            <div class="session-item">
+                                <div>
+                                    <strong>Excel Help</strong>
+                                    <br><small>Friday, Oct 6 - 3:00 PM</small>
+                                </div>
+                                <button class="btn btn-secondary" onclick="cancelSession()">Cancel</button>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: #f0f9ff; border-radius: 6px;">
+                                <p><strong>Sessions Remaining:</strong> <span id="remainingSessions">0</span></p>
+                                <small>Upgrade to Pro Plus for more sessions</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscription Page -->
+            <div id="subscription" class="page">
+                <h1>Subscription Management</h1>
+                
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3>Basic</h3>
+                        <div class="price">₦9,000<small>/month</small></div>
+                        <ul class="feature-list">
+                            <li>Access to all learning content</li>
+                            <li>Group office hours</li>
+                            <li>Progress tracking</li>
+                            <li>Quiz assessments</li>
+                        </ul>
+                        <button class="btn btn-secondary" style="width: 100%;">Current Plan</button>
+                    </div>
+                    
+                    <div class="pricing-card featured">
+                        <h3>Pro Lite</h3>
+                        <div class="price">₦12,000<small>/month</small></div>
+                        <ul class="feature-list">
+                            <li>Everything in Basic</li>
+                            <li>1 one-on-one session per month</li>
+                            <li>Priority support</li>
+                            <li>Session recordings</li>
+                        </ul>
+                        <button class="btn" style="width: 100%;">Current Plan</button>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <h3>Pro Plus</h3>
+                        <div class="price">₦18,000<small>/month</small></div>
+                        <ul class="feature-list">
+                            <li>Everything in Pro Lite</li>
+                            <li>4 one-on-one sessions per month</li>
+                            <li>Career guidance sessions</li>
+                            <li>Portfolio review</li>
+                        </ul>
+                        <button class="btn" onclick="upgradePlan()" style="width: 100%;">Upgrade</button>
+                    </div>
+                </div>
+                
+                <div style="background: white; border-radius: 12px; padding: 2rem; margin-top: 2rem;">
+                    <h2>Billing Information</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div>
+                            <h3>Current Subscription</h3>
+                            <p><strong>Plan:</strong> Pro Lite</p>
+                            <p><strong>Price:</strong> ₦12,000/month</p>
+                            <p><strong>Next billing date:</strong> November 6, 2025</p>
+                            <p><strong>Payment method:</strong> **** **** **** 1234</p>
+                        </div>
+                        <div>
+                            <h3>Usage This Month</h3>
+                            <p><strong>1:1 Sessions Used:</strong> 1 of 1</p>
+                            <p><strong>Group Sessions Attended:</strong> 3</p>
+                            <p><strong>Lessons Completed:</strong> 7</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button class="btn btn-secondary" onclick="pauseSubscription()">Pause Subscription</button>
+                        <button class="btn btn-secondary" onclick="cancelSubscription()">Cancel Subscription</button>
+                        <button class="btn" onclick="updatePayment()">Update Payment Method</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Page -->
+            <div id="admin" class="page">
+                <h1>Admin Dashboard</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">127</div>
+                        <div>Active Learners</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8</div>
+                        <div>Active Tutors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">65%</div>
+                        <div>Monthly Retention</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">42</div>
+                        <div>NPS Score</div>
+                    </div>
+                </div>
+                
+                <div class="admin-panel">
+                    <div class="admin-card">
+                        <h2>Content Management</h2>
+                        <div class="form-group">
+                            <label>Track Name</label>
+                            <select>
+                                <option>Data Analytics</option>
+                                <option>Data Science</option>
+                                <option>Web Development</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Module Title</label>
+                            <input type="text" placeholder="Enter module title">
+                        </div>
+                        <div class="form-group">
+                            <label>Lesson Title</label>
+                            <input type="text" placeholder="Enter lesson title">
+                        </div>
+                        <div class="form-group">
+                            <label>Video URL</label>
+                            <input type="url" placeholder="https://vimeo.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label>Lesson Content</label>
+                            <textarea rows="4" placeholder="Enter lesson content..."></textarea>
+                        </div>
+                        <button class="btn">Save Lesson</button>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <h2>Tutor Management</h2>
+                        <div style="max-height: 300px; overflow-y: auto;">
+                            <div class="session-item">
+                                <div>
+                                    <strong>Tunji Adebayo</strong>
+                                    <br>Data Analytics
+                                    <br><small>Rating: 4.8/5 | 23 sessions</small>
+                                </div>
+                                <button class="btn btn-secondary">View Profile</button>
+                            </div>
+                            <div class="session-item">
+                                <div>
+                                    <strong>Sarah Johnson</strong>
+                                    <br>Excel Training
+                                    <br><small>Rating: 4.9/5 | 31 sessions</small>
+                                </div>
+                                <button class="btn btn-secondary">View Profile</button>
+                            </div>
+                            <div class="session-item">
+                                <div>
+                                    <strong>Pending: John Doe</strong>
+                                    <br>Web Development
+                                    <br><small>Application submitted</small>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-success">Approve</button>
+                                    <button class="btn btn-secondary">Decline</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <h2>Schedule Management</h2>
+                        <div class="form-group">
+                            <label>Session Type</label>
+                            <select>
+                                <option>Group Office Hours</option>
+                                <option>Workshop</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date & Time</label>
+                            <input type="datetime-local">
+                        </div>
+                        <div class="form-group">
+                            <label>Assigned Tutor</label>
+                            <select>
+                                <option>Tunji Adebayo</option>
+                                <option>Sarah Johnson</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Zoom Link</label>
+                            <input type="url" placeholder="https://zoom.us/j/...">
+                        </div>
+                        <button class="btn">Schedule Session</button>
+                        
+                        <h3 style="margin-top: 2rem;">Upcoming Sessions</h3>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            <div class="session-item">
+                                <div>
+                                    <strong>Data Analytics Q&A</strong>
+                                    <br>Oct 7, 7:00 PM
+                                    <br><small>Tunji Adebayo | 15 registered</small>
+                                </div>
+                                <button class="btn btn-secondary">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <h2>User Analytics</h2>
+                        <div class="form-group">
+                            <label>Export Reports</label>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                <button class="btn btn-secondary">Subscriptions</button>
+                                <button class="btn btn-secondary">Progress</button>
+                                <button class="btn btn-secondary">Sessions</button>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin-top: 2rem;">Recent Activity</h3>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            <div style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">
+                                <small>Tola completed "Excel Formulas" lesson</small>
+                                <br><small style="color: #6b7280;">2 minutes ago</small>
+                            </div>
+                            <div style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">
+                                <small>New user Ada subscribed to Pro Lite</small>
+                                <br><small style="color: #6b7280;">15 minutes ago</small>
+                            </div>
+                            <div style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">
+                                <small>Zainab booked 1:1 session</small>
+                                <br><small style="color: #6b7280;">1 hour ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="sessionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('sessionModal')">&times;</span>
+            <h2>Join Session</h2>
+            <p>You're about to join the Data Analytics Q&A session.</p>
+            <div style="margin: 1.5rem 0;">
+                <p><strong>Session:</strong> Data Analytics Q&A</p>
+                <p><strong>Time:</strong> Tomorrow 7:00 PM</p>
+                <p><strong>Instructor:</strong> Tunji Adebayo</p>
+            </div>
+            <button class="btn" onclick="window.open('https://zoom.us/j/example', '_blank')">Launch Zoom</button>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('bookingModal')">&times;</span>
+            <h2>Confirm Booking</h2>
+            <p>Book your 1:1 session for:</p>
+            <div style="background: #f8fafc; padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                <p><strong>Date:</strong> <span id="selectedDate"></span></p>
+                <p><strong>Time:</strong> <span id="selectedTime"></span></p>
+                <p><strong>Duration:</strong> 15 minutes</p>
+            </div>
+            <div class="form-group">
+                <label>What would you like help with?</label>
+                <textarea rows="3" placeholder="Describe what you'd like to discuss..."></textarea>
+            </div>
+            <button class="btn" onclick="finalizeBooking()">Confirm Booking</button>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentUser = 'learner';
+        let selectedDate = '';
+        let selectedTime = '';
+        let userProgress = {
+            learner: { tier: 'Pro Lite', sessions: 0, progress: 35 },
+            tutor: { tier: 'Tutor', sessions: 12, progress: 100 },
+            admin: { tier: 'Admin', sessions: 0, progress: 100 }
+        };
+
+        // Initialize the application
+        function initApp() {
+            updateUI();
+        }
+
+        // Show different pages
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Switch user context
+        function switchUser() {
+            const userSelect = document.getElementById('userSelect');
+            currentUser = userSelect.value;
+            updateUI();
+        }
+
+        // Update UI based on current user
+        function updateUI() {
+            const user = userProgress[currentUser];
+            const userName = currentUser === 'learner' ? 'Tola' : 
+                           currentUser === 'tutor' ? 'Tunji' : 'Admin';
+            
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('dashboardName').textContent = userName;
+            document.getElementById('userTier').textContent = user.tier;
+            document.getElementById('tierName').textContent = user.tier;
+            
+            // Show/hide admin link
+            const adminLink = document.getElementById('adminLink');
+            adminLink.style.display = currentUser === 'admin' ? 'block' : 'none';
+            
+            // Update session counts
+            const sessionCount = document.getElementById('sessionCount');
+            const remainingSessions = document.getElementById('remainingSessions');
+            
+            if (user.tier === 'Pro Lite') {
+                sessionCount.textContent = `${1 - user.sessions} one-on-one session remaining`;
+                if (remainingSessions) remainingSessions.textContent = 1 - user.sessions;
+            } else if (user.tier === 'Pro Plus') {
+                sessionCount.textContent = `${4 - user.sessions} one-on-one sessions remaining`;
+                if (remainingSessions) remainingSessions.textContent = 4 - user.sessions;
+            } else {
+                sessionCount.textContent = 'Upgrade to access 1:1 sessions';
+                if (remainingSessions) remainingSessions.textContent = 0;
+            }
+            
+            // Show/hide booking interface
+            const bookingDiv = document.getElementById('oneOnOneBooking');
+            const sessionDiv = document.getElementById('oneOnOneSession');
+            if (user.tier !== 'Basic') {
+                if (bookingDiv) bookingDiv.style.display = 'block';
+                if (sessionDiv) sessionDiv.style.display = 'block';
+            } else {
+                if (bookingDiv) bookingDiv.style.display = 'none';
+                if (sessionDiv) sessionDiv.style.display = 'none';
+            }
+        }
+
+        // Learning functions
+        function openLesson(lessonId) {
+            showPage('learning');
+        }
+
+        function selectQuizOption(option) {
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+        }
+
+        function submitQuiz() {
+            const selected = document.querySelector('.quiz-option.selected');
+            if (selected && selected.textContent.includes('=')) {
+                alert('Correct! Well done.');
+            } else {
+                alert('Not quite right. The correct answer is B) =');
+            }
+        }
+
+        function playVideo() {
+            alert('Video would play here in the actual implementation.');
+        }
+
+        function completeLesson() {
+            alert('Lesson completed! Moving to next lesson.');
+            userProgress[currentUser].progress += 5;
+            showPage('dashboard');
+        }
+
+        function previousLesson() {
+            alert('Going to previous lesson.');
+        }
+
+        // Session functions
+        function joinSession() {
+            openModal('sessionModal');
+        }
+
+        function bookSession(dayElement) {
+            selectedDate = `October ${dayElement.textContent}, 2025`;
+            document.getElementById('timeSlots').style.display = 'block';
+        }
+
+        function selectTime(timeButton) {
+            document.querySelectorAll('#timeSlots button').forEach(btn => {
+                btn.classList.remove('btn');
+                btn.classList.add('btn-secondary');
+            });
+            timeButton.classList.remove('btn-secondary');
+            timeButton.classList.add('btn');
+            selectedTime = timeButton.textContent;
+        }
+
+        function confirmBooking() {
+            if (selectedDate && selectedTime) {
+                document.getElementById('selectedDate').textContent = selectedDate;
+                document.getElementById('selectedTime').textContent = selectedTime;
+                openModal('bookingModal');
+            } else {
+                alert('Please select a date and time.');
+            }
+        }
+
+        function finalizeBooking() {
+            const user = userProgress[currentUser];
+            if (user.tier === 'Basic') {
+                alert('Please upgrade your subscription to book 1:1 sessions.');
+                return;
+            }
+            
+            const maxSessions = user.tier === 'Pro Lite' ? 1 : 4;
+            if (user.sessions >= maxSessions) {
+                alert('You have reached your session limit for this month.');
+                return;
+            }
+            
+            user.sessions++;
+            updateUI();
+            closeModal('bookingModal');
+            alert('Session booked successfully!');
+        }
+
+        function cancelSession() {
+            if (confirm('Are you sure you want to cancel this session?')) {
+                userProgress[currentUser].sessions--;
+                updateUI();
+                alert('Session cancelled successfully.');
+            }
+        }
+
+        function joinZoom() {
+            alert('Joining Zoom session... (This would open Zoom in actual implementation)');
+        }
+
+        // Subscription functions
+        function upgradePlan() {
+            if (confirm('Upgrade to Pro Plus for ₦18,000/month?')) {
+                userProgress[currentUser].tier = 'Pro Plus';
+                updateUI();
+                alert('Upgraded to Pro Plus successfully!');
+            }
+        }
+
+        function pauseSubscription() {
+            if (confirm('Pause your subscription? You will lose access to content.')) {
+                alert('Subscription paused. You can resume anytime.');
+            }
+        }
+
+        function cancelSubscription() {
+            if (confirm('Are you sure you want to cancel your subscription?')) {
+                alert('Subscription cancelled. Sorry to see you go!');
+            }
+        }
+
+        function updatePayment() {
+            alert('Payment method update would be handled by Paystack/Stripe.');
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
