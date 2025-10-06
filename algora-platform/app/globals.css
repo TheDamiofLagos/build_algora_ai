@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+:root {
+  /* Slate colors */
+  --slate-50: #f8fafc;
+  --slate-100: #e2e8f0;
+  --slate-200: #cbd5f5;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-900: #0f172a;
+  
+  /* Primary colors (Teal-focused) */
+  --primary-50: #ecfeff;
+  --primary-100: #cffafe;
+  --primary-500: #22d3ee;
+  --primary-600: #06b6d4;
+  --primary-700: #0891b2;
+  
+  /* Accent colors */
+  --accent: #22d3ee;
+  --accent-dark: #0891b2;
+  --success: #10b981;
+  --warning: #f59e0b;
+  
+  /* Surface */
+  --surface: rgba(15, 23, 42, 0.65);
+  
+  /* Border radius */
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  
+  /* Shadows */
+  --shadow-lg: 0 24px 48px rgba(15, 23, 42, 0.25);
+  --shadow-md: 0 18px 30px rgba(15, 23, 42, 0.14);
+  --shadow-sm: 0 8px 18px rgba(15, 23, 42, 0.08);
+  
+  /* Default theme */
+  --background: #0b1220;
+  --foreground: #f8fafc;
+}
+
+@theme inline {
+  --color-slate-50: var(--slate-50);
+  --color-slate-100: var(--slate-100);
+  --color-slate-200: var(--slate-200);
+  --color-slate-400: var(--slate-400);
+  --color-slate-500: var(--slate-500);
+  --color-slate-900: var(--slate-900);
+  
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  --radius-lg: var(--radius-lg);
+  --radius-md: var(--radius-md);
+  --radius-sm: var(--radius-sm);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at 20% -10%, rgba(34, 211, 238, 0.15) 0%, transparent 45%),
+              radial-gradient(circle at 90% 0%, rgba(34, 211, 238, 0.10) 0%, transparent 55%),
+              linear-gradient(180deg, #000000 0%, #0a0a0a 35%, #111827 100%);
+  color: var(--slate-50);
+  line-height: 1.65;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Glass card effect */
+.glass-card {
+  background: rgba(15, 23, 42, 0.78);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0.04) 60%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease;
+}
