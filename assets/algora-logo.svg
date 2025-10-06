@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Algora logo mark</title>
+  <desc id="desc">A geometric sprout composed of three leaves forming the letter A in Algora green.</desc>
+  <defs>
+    <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#46c9ad" />
+      <stop offset="45%" stop-color="#0d8774" />
+      <stop offset="100%" stop-color="#0a554a" />
+    </linearGradient>
+    <linearGradient id="stemGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#dff5ee" />
+      <stop offset="100%" stop-color="#0d8774" />
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 58c12-18 16-28 16-34a16 16 0 1 0-32 0c0 6 4 16 16 34z" fill="url(#leafGradient)" />
+    <path d="M32 46c6-9 8-14 8-18a8 8 0 1 0-16 0c0 4 2 9 8 18z" fill="#031714" opacity="0.2" />
+    <path d="M32 54c-6-9-14-25-14-30a14 14 0 0 1 28 0c0 5-8 21-14 30z" fill="url(#stemGradient)" opacity="0.8" />
+    <path d="M32 34l10-18" stroke="#dff5ee" stroke-width="3" />
+    <path d="M32 34l-10-18" stroke="#dff5ee" stroke-width="3" />
+    <circle cx="32" cy="36" r="3.2" fill="#dff5ee" />
+    <path d="M32 34v14" stroke="#031714" stroke-width="2.4" opacity="0.45" />
+  </g>
+</svg>
