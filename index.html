@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Algora - Tech Learning Platform</title>
+    <script src="scripts/app.js" defer></script>
     <style>
         :root {
             --slate-50: #f4faf8;
@@ -471,10 +472,20 @@
             transition: transform 0.25s ease, border 0.25s ease, box-shadow 0.25s ease;
         }
 
+        .module-card:focus-visible {
+            outline: 2px solid rgba(70, 201, 173, 0.8);
+            outline-offset: 4px;
+        }
+
         .module-card:hover {
             transform: translateY(-6px);
             border-color: rgba(13, 135, 116, 0.45);
             box-shadow: 0 20px 40px rgba(13, 135, 116, 0.22);
+        }
+
+        .module-card.active-module {
+            border-color: rgba(13, 135, 116, 0.6);
+            box-shadow: 0 24px 46px rgba(13, 135, 116, 0.3);
         }
 
         .module-card.completed {
@@ -721,6 +732,12 @@
             border-color: rgba(13, 135, 116, 0.55);
         }
 
+        .calendar-day.selected {
+            background: rgba(13, 135, 116, 0.34);
+            border-color: rgba(13, 135, 116, 0.75);
+            box-shadow: 0 0 0 1px rgba(13, 135, 116, 0.45), 0 10px 20px rgba(13, 135, 116, 0.25);
+        }
+
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -907,6 +924,9 @@
             font-size: 26px;
             cursor: pointer;
             color: rgba(226, 232, 240, 0.55);
+            background: none;
+            border: none;
+            line-height: 1;
         }
 
         .pill {
@@ -994,11 +1014,11 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#" class="active" onclick="showPage('dashboard')">Dashboard</a></li>
-                    <li><a href="#" onclick="showPage('learning')">Learning</a></li>
-                    <li><a href="#" onclick="showPage('calendar')">Sessions</a></li>
-                    <li><a href="#" onclick="showPage('subscription')">Subscription</a></li>
-                    <li><a href="#" id="adminLink" onclick="showPage('admin')">Admin</a></li>
+                    <li><a href="#" class="active" data-page="dashboard">Dashboard</a></li>
+                    <li><a href="#" data-page="learning">Learning</a></li>
+                    <li><a href="#" data-page="calendar">Sessions</a></li>
+                    <li><a href="#" data-page="subscription">Subscription</a></li>
+                    <li><a href="#" id="adminLink" data-page="admin">Admin</a></li>
                 </ul>
             </nav>
             <div class="user-info">
@@ -1009,7 +1029,7 @@
                 <div class="user-avatar">
                     <span id="userName">Tola</span>
                 </div>
-                <select id="userSelect" onchange="switchUser()">
+                <select id="userSelect">
                     <option value="learner" selected>Learner</option>
                     <option value="tutor">Tutor</option>
                     <option value="admin">Admin</option>
@@ -1032,13 +1052,13 @@
                             </div>
                             <div class="progress-meta">
                                 <strong id="progressValue">35% complete</strong>
-                                <span>Excel Foundations path</span>
+                                <span id="currentModuleLabel">Module 2 · Working with Formulas</span>
                             </div>
                         </div>
                         <div class="quick-actions">
-                            <button class="btn" onclick="openLesson('excel-formulas')">Resume Excel lesson</button>
-                            <button class="btn-outline" onclick="showPage('calendar')">Book a 1:1 session</button>
-                            <button class="btn-subtle" onclick="joinSession()">Join upcoming office hours</button>
+                            <button class="btn" data-action="open-lesson" data-lesson="excel-formulas">Resume Excel lesson</button>
+                            <button class="btn-outline" data-action="show-page" data-target="calendar">Book a 1:1 session</button>
+                            <button class="btn-subtle" data-action="join-session">Join upcoming office hours</button>
                         </div>
                     </div>
                     <div class="insight-row">
@@ -1124,11 +1144,11 @@
                                 <h2>Learning path</h2>
                                 <p>Pick up where you left off and unlock completion badges along the way.</p>
                             </div>
-                            <button class="btn-outline" onclick="openLesson('syllabus')">View syllabus</button>
+                            <button class="btn-outline" data-action="open-lesson" data-lesson="syllabus">View syllabus</button>
                         </div>
 
                         <div class="module-list">
-                            <div class="module-card completed" onclick="openLesson('introduction')">
+                            <div class="module-card completed" data-action="open-lesson" data-lesson="introduction" data-lesson-title="Module 1 · Getting Started" role="button" tabindex="0">
                                 <div class="module-top">
                                     <h3>Module 1 · Getting Started</h3>
                                     <span class="pill">Completed</span>
@@ -1148,7 +1168,7 @@
                                 </div>
                             </div>
 
-                            <div class="module-card" onclick="openLesson('formulas')">
+                            <div class="module-card" data-action="open-lesson" data-lesson="formulas" data-lesson-title="Module 2 · Working with Formulas" role="button" tabindex="0">
                                 <div class="module-top">
                                     <h3>Module 2 · Working with Formulas</h3>
                                     <span class="pill">In progress</span>
@@ -1167,7 +1187,7 @@
                                 </div>
                             </div>
 
-                            <div class="module-card" onclick="openLesson('dashboards')">
+                            <div class="module-card" data-action="open-lesson" data-lesson="dashboards" data-lesson-title="Module 3 · Dashboards &amp; Insights" role="button" tabindex="0">
                                 <div class="module-top">
                                     <h3>Module 3 · Dashboards &amp; Insights</h3>
                                     <span class="pill">Unlocks soon</span>
@@ -1192,7 +1212,7 @@
                                 <strong>Need direction?</strong>
                                 <span>Your coach can review your portfolio and suggest the next session tailored to your goals.</span>
                             </div>
-                            <button class="btn-secondary" onclick="showPage('calendar')">Message coach</button>
+                            <button class="btn-secondary" data-action="show-page" data-target="calendar">Message coach</button>
                         </div>
                     </div>
 
@@ -1210,9 +1230,9 @@
                                     <br><small>Friday · 3:00 PM</small>
                                     <br><small>Mentor: Sarah Johnson</small>
                                 </div>
-                                <button class="btn-subtle" onclick="joinSession()">Join room</button>
+                                <button class="btn-subtle" data-action="join-session">Join room</button>
                             </div>
-                            <button class="btn" onclick="showPage('calendar')" style="width: 100%; margin-top: 18px;">Book more time</button>
+                            <button class="btn" data-action="show-page" data-target="calendar" style="width: 100%; margin-top: 18px;">Book more time</button>
                         </div>
 
                         <div class="subscription-info">
@@ -1221,7 +1241,7 @@
                                 <span id="tierName">Pro Lite</span>
                             </div>
                             <p id="sessionCount">1 one-on-one session remaining</p>
-                            <button class="btn-outline" onclick="showPage('subscription')" style="width: 100%; margin-top: 18px;">Manage plan</button>
+                            <button class="btn-outline" data-action="show-page" data-target="subscription" style="width: 100%; margin-top: 18px;">Manage plan</button>
                         </div>
 
                         <div class="upcoming-sessions">
@@ -1231,14 +1251,14 @@
                                     <strong>Data Analytics Q&amp;A</strong>
                                     <br><small>Tuesday · 7:00 PM</small>
                                 </div>
-                                <button class="btn-secondary" onclick="joinZoom()">Join</button>
+                                <button class="btn-secondary" data-action="join-zoom">Join</button>
                             </div>
                             <div class="session-item">
                                 <div>
                                     <strong>Excel Workshop</strong>
                                     <br><small>Saturday · 2:00 PM</small>
                                 </div>
-                                <button class="btn-secondary" onclick="joinZoom()">Join</button>
+                                <button class="btn-secondary" data-action="join-zoom">Join</button>
                             </div>
                         </div>
                     </aside>
@@ -1246,23 +1266,23 @@
             </div>
 
             <div id="learning" class="page">
-                <h1>Excel Fundamentals · Lesson 3</h1>
-                <p style="color: rgba(226, 232, 240, 0.7); margin-top: 8px;">Working with formulas to build confident analysis skills.</p>
+                <h1 id="lessonTitle">Excel Fundamentals · Lesson 3</h1>
+                <p id="lessonSubtitle" style="color: rgba(226, 232, 240, 0.7); margin-top: 8px;">Working with formulas to build confident analysis skills.</p>
 
                 <div class="lesson-content">
                     <div class="section-heading" style="margin-bottom: 14px;">
                         <div>
-                            <h2>Working with Formulas</h2>
-                            <p>Master the building blocks of Excel to analyse data faster.</p>
+                            <h2 id="lessonTopic">Working with Formulas</h2>
+                            <p id="lessonSummary">Master the building blocks of Excel to analyse data faster.</p>
                         </div>
-                        <span class="pill">Duration · 15 mins</span>
+                        <span class="pill" id="lessonDuration">Duration · 15 mins</span>
                     </div>
 
                     <div class="video-container">
                         <div style="text-align: center;">
                             <h3>📹 Video: Excel Formulas Basics</h3>
                             <p>Guided walkthrough on creating formulas, using functions, and working with references.</p>
-                            <button class="btn" style="margin-top: 16px;" onclick="playVideo()">Play video</button>
+                            <button class="btn" style="margin-top: 16px;" data-action="play-video">Play video</button>
                         </div>
                     </div>
 
@@ -1290,17 +1310,17 @@
                         <h3>Knowledge check</h3>
                         <div class="quiz-question">Which symbol must every Excel formula begin with?</div>
                         <div class="quiz-options">
-                            <div class="quiz-option" onclick="selectQuizOption(this)">A) +</div>
-                            <div class="quiz-option" onclick="selectQuizOption(this)">B) =</div>
-                            <div class="quiz-option" onclick="selectQuizOption(this)">C) -</div>
-                            <div class="quiz-option" onclick="selectQuizOption(this)">D) *</div>
+                            <div class="quiz-option" data-action="select-quiz-option">A) +</div>
+                            <div class="quiz-option" data-action="select-quiz-option">B) =</div>
+                            <div class="quiz-option" data-action="select-quiz-option">C) -</div>
+                            <div class="quiz-option" data-action="select-quiz-option">D) *</div>
                         </div>
-                        <button class="btn" onclick="submitQuiz()" style="margin-top: 18px;">Submit answer</button>
+                        <button class="btn" data-action="submit-quiz" style="margin-top: 18px;">Submit answer</button>
                     </div>
 
                     <div style="display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; margin-top: 28px;">
-                        <button class="btn-secondary" onclick="previousLesson()">← Previous lesson</button>
-                        <button class="btn" onclick="completeLesson()">Complete lesson →</button>
+                        <button class="btn-secondary" data-action="previous-lesson">← Previous lesson</button>
+                        <button class="btn" data-action="complete-lesson">Complete lesson →</button>
                     </div>
                 </div>
             </div>
@@ -1311,7 +1331,7 @@
                         <h1>Office hours &amp; booking</h1>
                         <p>Plan group and 1:1 sessions to keep moving.</p>
                     </div>
-                    <button class="btn-outline" onclick="showPage('dashboard')">Back to dashboard</button>
+                    <button class="btn-outline" data-action="show-page" data-target="dashboard">Back to dashboard</button>
                 </div>
 
                 <div style="display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 24px;">
@@ -1325,7 +1345,7 @@
                                     <br>Weekly group discussion and problem-solving
                                     <br><small>Instructor: Tunji Adebayo</small>
                                 </div>
-                                <button class="btn-secondary" onclick="joinZoom()">Join Zoom</button>
+                                <button class="btn-secondary" data-action="join-zoom">Join Zoom</button>
                             </div>
                             <div class="session-item" style="margin-top: 12px;">
                                 <div>
@@ -1333,7 +1353,7 @@
                                     <br>Hands-on Excel practice session
                                     <br><small>Instructor: Sarah Johnson</small>
                                 </div>
-                                <button class="btn-secondary" onclick="joinZoom()">Join Zoom</button>
+                                <button class="btn-secondary" data-action="join-zoom">Join Zoom</button>
                             </div>
                         </div>
 
@@ -1350,16 +1370,16 @@
                                 <div>Sat</div>
                                 <div class="calendar-day">1</div>
                                 <div class="calendar-day">2</div>
-                                <div class="calendar-day available" onclick="bookSession(this)">3</div>
+                                <div class="calendar-day available" data-action="book-session" data-date="October 3, 2025">3</div>
                                 <div class="calendar-day">4</div>
-                                <div class="calendar-day available" onclick="bookSession(this)">5</div>
+                                <div class="calendar-day available" data-action="book-session" data-date="October 5, 2025">5</div>
                                 <div class="calendar-day">6</div>
                                 <div class="calendar-day">7</div>
-                                <div class="calendar-day available" onclick="bookSession(this)">8</div>
+                                <div class="calendar-day available" data-action="book-session" data-date="October 8, 2025">8</div>
                                 <div class="calendar-day">9</div>
-                                <div class="calendar-day available" onclick="bookSession(this)">10</div>
+                                <div class="calendar-day available" data-action="book-session" data-date="October 10, 2025">10</div>
                                 <div class="calendar-day">11</div>
-                                <div class="calendar-day available" onclick="bookSession(this)">12</div>
+                                <div class="calendar-day available" data-action="book-session" data-date="October 12, 2025">12</div>
                                 <div class="calendar-day">13</div>
                                 <div class="calendar-day">14</div>
                             </div>
@@ -1367,12 +1387,12 @@
                             <div id="timeSlots" style="display: none;">
                                 <h3>Available times</h3>
                                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin: 16px 0;">
-                                    <button class="btn-secondary" onclick="selectTime(this)">10:00 AM</button>
-                                    <button class="btn-secondary" onclick="selectTime(this)">2:00 PM</button>
-                                    <button class="btn-secondary" onclick="selectTime(this)">4:00 PM</button>
-                                    <button class="btn-secondary" onclick="selectTime(this)">6:00 PM</button>
+                                    <button class="btn-secondary" data-action="select-time" data-time="10:00 AM">10:00 AM</button>
+                                    <button class="btn-secondary" data-action="select-time" data-time="2:00 PM">2:00 PM</button>
+                                    <button class="btn-secondary" data-action="select-time" data-time="4:00 PM">4:00 PM</button>
+                                    <button class="btn-secondary" data-action="select-time" data-time="6:00 PM">6:00 PM</button>
                                 </div>
-                                <button class="btn" onclick="confirmBooking()" style="width: 100%;">Confirm booking</button>
+                                <button class="btn" data-action="confirm-booking" style="width: 100%;">Confirm booking</button>
                             </div>
                         </div>
                     </div>
@@ -1385,7 +1405,7 @@
                                     <strong>Excel Help</strong>
                                     <br><small>Friday, Oct 6 · 3:00 PM</small>
                                 </div>
-                                <button class="btn-outline" onclick="cancelSession()">Cancel</button>
+                                <button class="btn-outline" data-action="cancel-session">Cancel</button>
                             </div>
                             <div style="margin-top: 18px; padding: 16px; border-radius: 12px; background: rgba(70, 201, 173, 0.12); border: 1px solid rgba(70, 201, 173, 0.35);">
                                 <p><strong>Sessions remaining:</strong> <span id="remainingSessions">0</span></p>
@@ -1408,7 +1428,7 @@
                         <h1>Manage subscription</h1>
                         <p>Flexible options to match your learning goals.</p>
                     </div>
-                    <button class="btn-outline" onclick="showPage('dashboard')">Back</button>
+                    <button class="btn-outline" data-action="show-page" data-target="dashboard">Back</button>
                 </div>
 
                 <div class="pricing-grid">
@@ -1448,7 +1468,7 @@
                             <li>Career guidance sessions</li>
                             <li>Portfolio review</li>
                         </ul>
-                        <button class="btn" onclick="upgradePlan()" style="width: 100%;">Upgrade</button>
+                        <button class="btn" data-action="upgrade-plan" style="width: 100%;">Upgrade</button>
                     </div>
                 </div>
 
@@ -1469,9 +1489,9 @@
                         </div>
                     </div>
                     <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 12px;">
-                        <button class="btn-secondary" onclick="pauseSubscription()">Pause subscription</button>
-                        <button class="btn-secondary" onclick="cancelSubscription()">Cancel subscription</button>
-                        <button class="btn" onclick="updatePayment()">Update payment method</button>
+                        <button class="btn-secondary" data-action="pause-subscription">Pause subscription</button>
+                        <button class="btn-secondary" data-action="cancel-subscription">Cancel subscription</button>
+                        <button class="btn" data-action="update-payment">Update payment method</button>
                     </div>
                 </div>
             </div>
@@ -1482,7 +1502,7 @@
                         <h1>Admin dashboard</h1>
                         <p>Monitor learner success, manage sessions, and grow Algora.</p>
                     </div>
-                    <button class="btn-outline" onclick="showPage('dashboard')">Exit admin</button>
+                    <button class="btn-outline" data-action="show-page" data-target="dashboard">Exit admin</button>
                 </div>
 
                 <div class="stats-grid">
@@ -1613,7 +1633,7 @@
 
     <div id="sessionModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('sessionModal')">&times;</span>
+            <button class="close-modal" type="button" data-action="close-modal" data-target="sessionModal" aria-label="Close join session dialog">&times;</button>
             <h2>Join session</h2>
             <p>You're about to join the Data Analytics Q&amp;A session.</p>
             <div style="margin: 20px 0;">
@@ -1621,13 +1641,13 @@
                 <p><strong>Time:</strong> Tomorrow 7:00 PM</p>
                 <p><strong>Instructor:</strong> Tunji Adebayo</p>
             </div>
-            <button class="btn" onclick="window.open('https://zoom.us/j/example', '_blank')">Launch Zoom</button>
+            <a class="btn" href="https://zoom.us/j/example" target="_blank" rel="noopener">Launch Zoom</a>
         </div>
     </div>
 
     <div id="bookingModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('bookingModal')">&times;</span>
+            <button class="close-modal" type="button" data-action="close-modal" data-target="bookingModal" aria-label="Close booking dialog">&times;</button>
             <h2>Confirm booking</h2>
             <p>Book your 1:1 session for:</p>
             <div style="background: rgba(15, 23, 42, 0.72); padding: 18px; border-radius: 12px; border: 1px solid rgba(148, 163, 184, 0.2); margin: 18px 0;">
@@ -1639,213 +1659,11 @@
                 <label>What would you like help with?</label>
                 <textarea rows="3" placeholder="Describe what you'd like to discuss..."></textarea>
             </div>
-            <button class="btn" onclick="finalizeBooking()">Confirm booking</button>
+            <button class="btn" data-action="
+   e-booking">Confirm booking</button>
         </div>
     </div>
 
-    <script>
-        let currentUser = 'learner';
-        let selectedDate = '';
-        let selectedTime = '';
-        let userProgress = {
-            learner: { tier: 'Pro Lite', sessions: 0, progress: 35 },
-            tutor: { tier: 'Tutor', sessions: 12, progress: 100 },
-            admin: { tier: 'Admin', sessions: 0, progress: 100 }
-        };
-
-        function initApp() {
-            updateUI();
-        }
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
-            const activeLink = document.querySelector(`nav a[onclick="showPage('${pageId}')"]`);
-            if (activeLink) {
-                activeLink.classList.add('active');
-            }
-        }
-
-        function switchUser() {
-            const userSelect = document.getElementById('userSelect');
-            currentUser = userSelect.value;
-            updateUI();
-        }
-
-        function updateUI() {
-            const user = userProgress[currentUser];
-            const userName = currentUser === 'learner' ? 'Tola' : currentUser === 'tutor' ? 'Tunji' : 'Admin';
-
-            document.getElementById('userName').textContent = userName;
-            document.getElementById('dashboardName').textContent = userName;
-            document.getElementById('userTier').textContent = user.tier;
-            document.getElementById('tierName').textContent = user.tier;
-
-            const progressBar = document.getElementById('profileProgress');
-            const progressValue = document.getElementById('progressValue');
-            if (progressBar) {
-                progressBar.style.width = `${Math.min(user.progress, 100)}%`;
-            }
-            if (progressValue) {
-                progressValue.textContent = `${Math.min(user.progress, 100)}% complete`;
-            }
-
-            const adminLink = document.getElementById('adminLink');
-            adminLink.style.display = currentUser === 'admin' ? 'block' : 'none';
-
-            const sessionCount = document.getElementById('sessionCount');
-            const remainingSessions = document.getElementById('remainingSessions');
-
-            if (user.tier === 'Pro Lite') {
-                sessionCount.textContent = `${Math.max(1 - user.sessions, 0)} one-on-one session remaining`;
-                if (remainingSessions) remainingSessions.textContent = Math.max(1 - user.sessions, 0);
-            } else if (user.tier === 'Pro Plus') {
-                sessionCount.textContent = `${Math.max(4 - user.sessions, 0)} one-on-one sessions remaining`;
-                if (remainingSessions) remainingSessions.textContent = Math.max(4 - user.sessions, 0);
-            } else {
-                sessionCount.textContent = 'Upgrade to access 1:1 sessions';
-                if (remainingSessions) remainingSessions.textContent = 0;
-            }
-
-            const bookingDiv = document.getElementById('oneOnOneBooking');
-            const sessionDiv = document.getElementById('oneOnOneSession');
-            if (bookingDiv) bookingDiv.style.display = user.tier !== 'Basic' ? 'block' : 'none';
-            if (sessionDiv) sessionDiv.style.display = user.tier !== 'Basic' ? 'flex' : 'none';
-        }
-
-        function openLesson() {
-            showPage('learning');
-        }
-
-        function selectQuizOption(option) {
-            document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
-            option.classList.add('selected');
-        }
-
-        function submitQuiz() {
-            const selected = document.querySelector('.quiz-option.selected');
-            if (selected && selected.textContent.includes('=')) {
-                alert('Correct! Well done.');
-            } else {
-                alert('Not quite right. The correct answer is B) =');
-            }
-        }
-
-        function playVideo() {
-            alert('Video would play here in the actual implementation.');
-        }
-
-        function completeLesson() {
-            alert('Lesson completed! Moving to next lesson.');
-            userProgress[currentUser].progress = Math.min(userProgress[currentUser].progress + 5, 100);
-            showPage('dashboard');
-            updateUI();
-        }
-
-        function previousLesson() {
-            alert('Going to previous lesson.');
-        }
-
-        function joinSession() {
-            openModal('sessionModal');
-        }
-
-        function bookSession(dayElement) {
-            selectedDate = `October ${dayElement.textContent}, 2025`;
-            document.getElementById('timeSlots').style.display = 'block';
-        }
-
-        function selectTime(timeButton) {
-            document.querySelectorAll('#timeSlots button').forEach(btn => {
-                btn.classList.remove('btn');
-                btn.classList.add('btn-secondary');
-            });
-            timeButton.classList.remove('btn-secondary');
-            timeButton.classList.add('btn');
-            selectedTime = timeButton.textContent;
-        }
-
-        function confirmBooking() {
-            if (selectedDate && selectedTime) {
-                document.getElementById('selectedDate').textContent = selectedDate;
-                document.getElementById('selectedTime').textContent = selectedTime;
-                openModal('bookingModal');
-            } else {
-                alert('Please select a date and time.');
-            }
-        }
-
-        function finalizeBooking() {
-            const user = userProgress[currentUser];
-            if (user.tier === 'Basic') {
-                alert('Please upgrade your subscription to book 1:1 sessions.');
-                return;
-            }
-
-            const maxSessions = user.tier === 'Pro Lite' ? 1 : 4;
-            if (user.sessions >= maxSessions) {
-                alert('You have reached your session limit for this month.');
-                return;
-            }
-
-            user.sessions++;
-            updateUI();
-            closeModal('bookingModal');
-            alert('Session booked successfully!');
-        }
-
-        function cancelSession() {
-            if (confirm('Are you sure you want to cancel this session?')) {
-                userProgress[currentUser].sessions = Math.max(userProgress[currentUser].sessions - 1, 0);
-                updateUI();
-                alert('Session cancelled successfully.');
-            }
-        }
-
-        function joinZoom() {
-            alert('Joining Zoom session... (This would open Zoom in actual implementation)');
-        }
-
-        function upgradePlan() {
-            if (confirm('Upgrade to Pro Plus for ₦18,000/month?')) {
-                userProgress[currentUser].tier = 'Pro Plus';
-                updateUI();
-                alert('Upgraded to Pro Plus successfully!');
-            }
-        }
-
-        function pauseSubscription() {
-            if (confirm('Pause your subscription? You will lose access to content.')) {
-                alert('Subscription paused. You can resume anytime.');
-            }
-        }
-
-        function cancelSubscription() {
-            if (confirm('Are you sure you want to cancel your subscription?')) {
-                alert('Subscription cancelled. Sorry to see you go!');
-            }
-        }
-
-        function updatePayment() {
-            alert('Payment method update would be handled by Paystack/Stripe.');
-        }
-
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        window.onclick = function(event) {
-            if (event.target.classList && event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', initApp);
-    </script>
+    
 </body>
 </html>
